@@ -186,5 +186,47 @@ its time for duel
     <div class="ball"></div>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flying Dinosaur Animation</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #87CEEB; /* Sky blue background */
+        }
+
+        .dinosaur {
+            width: 100px; /* Adjust size as needed */
+            height: 100px;
+            background-color: #228B22; /* Dinosaur color */
+            position: absolute;
+            bottom: 50px; /* Start position from the bottom */
+            animation: fly 5s linear infinite;
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%); /* Simple triangle shape */
+        }
+
+        @keyframes fly {
+            0% {
+                left: -100px; /* Start off the left */
+                transform: rotate(0deg); /* Initial rotation */
+            }
+            50% {
+                transform: translateY(-100px) rotate(10deg); /* Fly up */
+            }
+            100% {
+                left: 100%; /* Move off the right */
+                transform: rotate(0deg); /* Reset rotation */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dinosaur"></div>
+</body>
+</html>
 
 
