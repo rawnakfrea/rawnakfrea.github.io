@@ -13,3 +13,113 @@ its time for duel
 </head>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Multiplayer Board Game</title>
+</head>
+<body>
+    <h1>Simple Multiplayer Board Game</h1>
+    <div id="board"></div>
+    <div id="status"></div>
+    <button id="nextTurn">Next Turn</button>
+
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 10px;
+    margin: 20px auto;
+}
+
+.square {
+    width: 100px;
+    height: 100px;
+    background-color: lightgray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.square:hover {
+    background-color: darkgray;
+}
+const board = document.getElementById('board');
+const status = document.getElementById('status');
+const nextTurnButton = document.getElementById('nextTurn');
+
+let currentPlayer = 0;
+const players = ['X', 'O'];
+const gameState = Array(9).fill(null);
+
+function createBoard() {
+    for (let i = 0; i < 9; i++) {
+        const square = document.createElement('div');
+        square.classList.add('square');
+        square.dataset.index = i;
+        square.addEventListener('click', handleSquareClick);
+        board.appendChild(square);
+    }
+}
+
+function handleSquareClick(event) {
+    const index = event.target.dataset.index;
+    if (!gameState[index]) {
+        gameState[index] = players[currentPlayer];
+        event.target.textContent = players[currentPlayer];
+        checkWin();
+        currentPlayer = (currentPlayer + 1) % 2;
+        updateStatus();
+    }
+}
+
+function updateStatus() {
+    status.textContent = `Current Player: ${players[currentPlayer]}`;
+}
+
+function checkWin() {
+    const winningCombinations = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+    ];
+
+    for (const combination of winningCombinations) {
+        const [a, b, c] = combination;
+        if (gameState[a] && gameState[a] === gameState[b] && gameState[a] === gameState[c]) {
+            status.textContent = `Player ${gameState[a]} wins!`;
+            board.removeEventListener('click', handleSquareClick);
+            return;
+        }
+    }
+
+    if (!gameState.includes(null)) {
+        status.textContent = "It's a draw!";
+    }
+}
+
+nextTurnButton.addEventListener('click', () => {
+    currentPlayer = (currentPlayer + 1) % 2;
+    updateStatus();
+});
+
+createBoard();
+updateStatus();
